@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodShare AI — Surplus Food Rescue Platform</title>
+  <meta name="description" content="FoodShare AI connects food donors with verified NGOs through volunteer deliveries, preventing edible food waste with intelligent surplus forecasts.">
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS Grid & Utilities -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/dist/css/bootstrap-grid.min.css" rel="stylesheet">
+  
+  <!-- Custom Modern Design System & Cyber Visual Effects -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/effects.css">
+</head>
+<body>
+
+  <!-- Dynamic Aurora Ambient Glow Orbs -->
+  <div class="aurora-container">
+    <div class="aurora-orb aurora-orb-1"></div>
+    <div class="aurora-orb aurora-orb-2"></div>
+    <div class="aurora-orb aurora-orb-3"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="navbar-custom">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <a href="#" class="brand-badge" id="nav-brand-logo" onclick="App.showView('landing'); return false;">
+          <div class="brand-icon">🌱</div>
+          <span>FoodShare <span style="font-size: 0.8em; color: #38bdf8; font-weight: 800;">AI</span></span>
+        </a>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+        <!-- Notification Bell (Auth required) -->
+        <div id="nav-notif-container" style="position: relative; display: none;">
+          <button id="btn-toggle-notifs" class="btn-secondary-custom" style="padding: 0.5rem 0.8rem; position: relative;" title="In-App Notifications">
+            <span>🔔</span>
+            <span id="notif-badge" class="badge-status" style="position: absolute; top: -5px; right: -5px; padding: 0.15rem 0.45rem; font-size: 0.65rem; background: var(--accent-rose); color: white; display: none;">0</span>
+          </button>
+          
+          <div id="notif-dropdown" class="notif-panel">
+            <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+              <strong style="font-size: 0.85rem; color: #ffffff;">Notifications</strong>
+              <button onclick="NotificationManager.markAllRead()" style="background: none; border: none; color: var(--accent-emerald); font-size: 0.75rem; cursor: pointer;">Mark all read</button>
+            </div>
+            <div id="notif-dropdown-list"></div>
+          </div>
+        </div>
+
+        <!-- Logged Out Navigation -->
+        <div id="nav-auth-logged-out" class="d-flex align-items-center gap-2">
+          <button class="btn-secondary-custom" onclick="App.openAuthModal('login')">Sign In</button>
+          <button class="btn-primary-custom" onclick="App.openAuthModal('register')">Register Now</button>
+        </div>
+
+        <!-- Logged In Navigation -->
+        <div id="nav-auth-logged-in" class="d-flex align-items-center gap-3" style="display: none !important;">
+          <div class="d-flex align-items-center gap-2">
+            <span id="user-role-badge" class="badge-status">ROLE</span>
+            <span id="user-display-name" style="font-weight: 600; font-size: 0.9rem; color: #ffffff;">User</span>
+          </div>
+          <button class="btn-secondary-custom" onclick="App.showView('dashboard')">Dashboard</button>
+          <button class="btn-secondary-custom" style="padding: 0.5rem 0.9rem; color: #fb7185;" onclick="App.logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="container my-4" style="min-height: 75vh;">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: LANDING PAGE (Public Overview)    -->
+    <!-- ========================================== -->
+    <section id="view-landing" class="view-section">
+      <!-- Hero Banner -->
+      <div class="glass-panel glass-panel-glow p-4 p-md-5 mb-4 text-center text-md-start position-relative overflow-hidden" style="background: radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.18) 0%, rgba(14, 165, 233, 0.08) 40%, rgba(17, 24, 39, 0.95) 75%);">
+        <div class="row align-items-center position-relative" style="z-index: 2;">
+          <div class="col-md-7">
+            <div class="d-flex align-items-center gap-2 mb-3 justify-content-center justify-content-md-start">
+              <span class="pulse-indicator"></span>
+              <div class="ai-badge">
+                <span>⚡</span> AI-Driven Surplus Rescue Engine · Real Database Records
+              </div>
+            </div>
+            <h1 class="display-5 fw-bold mb-3 shimmer-text" style="line-height: 1.15; letter-spacing: -0.03em;">
+              Eliminate Edible Food Waste.<br>
+              <span style="background: linear-gradient(135deg, #34d399 0%, #38bdf8 60%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Feed Communities with Dignity.
+              </span>
+            </h1>
+            <p class="lead mb-4" style="color: var(--text-muted); font-size: 1.05rem; max-width: 650px;">
+              FoodShare AI orchestrates donors, admin-verified NGOs, and volunteer couriers in an atomic, transparent ecosystem. Powered by baseline moving-average predictive forecasting, concurrency locks, and doorstep tracking.
+            </p>
+            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
+              <button class="btn-primary-custom btn-glow-shimmer" onclick="App.openAuthModal('register', 'DONOR')">
+                <span>🍲</span> Donate Food as Donor
+              </button>
+              <button class="btn-sky-custom btn-glow-shimmer" onclick="App.openAuthModal('register', 'NGO')">
+                <span>🏢</span> Register as NGO Partner
+              </button>
+              <button class="btn-secondary-custom" onclick="App.openAuthModal('register', 'VOLUNTEER')">
+                <span>🚴</span> Become Courier Volunteer
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-5 mt-4 mt-md-0 text-center position-relative">
+            <!-- Floating Cyber Accents -->
+            <div class="floating-hero-pill floating-hero-pill-1 mb-2 d-none d-sm-inline-flex">
+              <span class="pulse-indicator"></span>
+              <span>🍞 30 Sourdough Loaves Rescued</span>
+            </div>
+            
+            <div class="glass-panel glass-panel-glow p-4 card-3d" style="border-color: rgba(52, 211, 153, 0.35);">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0" style="color: #34d399; font-size: 1.05rem;">Live Verified Platform Impact</h5>
+                <span class="ai-badge" style="font-size: 0.68rem;">Real SQLite Audit</span>
+              </div>
+              <div class="mb-3">
+                <div class="metric-value" id="landing-kg-rescued">0 kg</div>
+                <div class="metric-label">Kilograms Rescued</div>
+              </div>
+              <div class="mb-3">
+                <div class="metric-value" id="landing-portions-saved" style="color: #38bdf8;">0</div>
+                <div class="metric-label">Portions / Meals Saved</div>
+              </div>
+              <div class="d-flex justify-content-around pt-3" style="border-top: 1px solid var(--border-color);">
+                <div>
+                  <div style="font-weight: 800; font-size: 1.25rem; color: #ffffff;" id="landing-active-listings">0</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Active Listings</div>
+                </div>
+                <div>
+                  <div style="font-weight: 800; font-size: 1.25rem; color: #ffffff;" id="landing-verified-ngos">0</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Verified NGOs</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="floating-hero-pill floating-hero-pill-2 mt-2 d-none d-sm-inline-flex">
+              <span>🤖</span>
+              <span>AI Surplus Forecast: 95% Confidence</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How It Works Section -->
+      <div class="row g-4 mb-5">
+        <div class="col-12 text-center mb-2">
+          <h2 class="h3">End-to-End Four-Step Rescue Lifecycle</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Every state transition is audited and guarded by database constraints</p>
+        </div>
+        <div class="col-md-3">
+          <div class="glass-panel p-4 h-100">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">📦</div>
+            <h4 class="h5 mb-2">1. Food Listing</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">
+              Donors publish excess meals with quantity, pickup window, and expiry time. AI provides smart baseline suggestions.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="glass-panel p-4 h-100">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">🔒</div>
+            <h4 class="h5 mb-2">2. Atomic Claims</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">
+              Admin-verified NGOs claim listings with strict concurrency locks to guarantee no double-claims.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="glass-panel p-4 h-100">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">🚴</div>
+            <h4 class="h5 mb-2">3. Volunteer Courier</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">
+              Volunteers claim available pickup tasks, confirm collection, and transport the food securely.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="glass-panel p-4 h-100">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">✅</div>
+            <h4 class="h5 mb-2">4. Doorstep Delivery</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">
+              Task marked delivered upon arrival at the NGO. Real-time notifications alert all stakeholders immediately.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: DONOR DASHBOARD                   -->
+    <!-- ========================================== -->
+    <section id="view-donor" class="view-section" style="display: none;">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+          <h2 class="h3 mb-1">Donor Management Portal</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Create, track, and manage your surplus food donations</p>
+        </div>
+        <button class="btn-primary-custom" onclick="App.openCreateListingModal()">
+          <span>+</span> Create New Donation Listing
+        </button>
+      </div>
+
+      <!-- Donor Metrics Bar -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="donor-stat-active">0</div>
+            <div class="metric-label">Active / Pending</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="donor-stat-delivered" style="color: #34d399;">0</div>
+            <div class="metric-label">Delivered Successfully</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="donor-stat-kg">0 kg</div>
+            <div class="metric-label">Food Rescued (Kg)</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="donor-stat-portions" style="color: #38bdf8;">0</div>
+            <div class="metric-label">Portions Rescued</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Surplus Predictor Assistant (FR-11) -->
+      <div class="ai-predictor-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <span style="font-size: 1.5rem;">🤖</span>
+            <h4 class="h5 mb-0 text-white">AI Surplus Predictor</h4>
+            <span class="ai-badge">Statistical Baseline Model (FR-11)</span>
+          </div>
+          <button class="btn-secondary-custom" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="App.loadSurplusForecast()">
+            ↻ Recalculate Estimate
+          </button>
+        </div>
+        <p style="font-size: 0.82rem; color: #a7f3d0; margin-bottom: 1rem;" id="ai-predictor-disclaimer">
+          ⚠️ AI Estimate: Computed via historical moving averages. Documented statistical baseline, never live inventory data.
+        </p>
+
+        <div class="row g-3" id="ai-predictor-content">
+          <div class="col-md-4">
+            <div style="background: rgba(0,0,0,0.25); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Recommended Category</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: #ffffff;" id="ai-pred-category">Cooked Meals</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div style="background: rgba(0,0,0,0.25); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Predicted Surplus Volume</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: #34d399;" id="ai-pred-qty">15 kg</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div style="background: rgba(0,0,0,0.25); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Confidence Score</div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #38bdf8;" id="ai-pred-confidence">75%</div>
+              </div>
+              <button class="btn-primary-custom" style="padding: 0.45rem 0.85rem; font-size: 0.8rem;" onclick="App.applyAiSuggestion()">
+                Prefill Form
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donor Listings List -->
+      <div class="glass-panel p-4">
+        <h4 class="h5 mb-3">Your Food Listings History & Tracking</h4>
+        <div id="donor-listings-container">
+          <!-- Filled dynamically via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: NGO PORTAL (Verified & Pending)   -->
+    <!-- ========================================== -->
+    <section id="view-ngo" class="view-section" style="display: none;">
+      <!-- NGO Verification Alert Banner -->
+      <div id="ngo-status-banner" class="mb-4">
+        <!-- Rendered dynamically: Pending vs Approved -->
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="h3 mb-1">NGO Partner Food Rescue Portal</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Browse available surplus donations and track incoming deliveries</p>
+        </div>
+      </div>
+
+      <!-- NGO Metrics Bar -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="ngo-stat-available">0</div>
+            <div class="metric-label">Available Listings</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="ngo-stat-claimed" style="color: #fbbf24;">0</div>
+            <div class="metric-label">Active Claims</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="ngo-stat-delivered" style="color: #34d399;">0</div>
+            <div class="metric-label">Deliveries Received</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="ngo-stat-kg">0 kg</div>
+            <div class="metric-label">Total Rescued Received</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NGO Portal Tabs -->
+      <div class="d-flex gap-2 mb-4 border-bottom pb-2" style="border-color: var(--border-color) !important;">
+        <button class="filter-pill active" id="tab-ngo-browse" onclick="App.switchNgoTab('browse')">Available Surplus Food Catalog</button>
+        <button class="filter-pill" id="tab-ngo-claims" onclick="App.switchNgoTab('claims')">My Claimed Food & Logistics</button>
+      </div>
+
+      <!-- Tab Content 1: Available Listings -->
+      <div id="ngo-tab-content-browse">
+        <!-- Category Filter & Search Bar -->
+        <div class="glass-panel p-3 mb-4">
+          <div class="row g-2 align-items-center">
+            <div class="col-md-5">
+              <input type="text" id="ngo-search-input" class="form-control-custom" placeholder="Search by food title or location..." oninput="App.loadAvailableListings()">
+            </div>
+            <div class="col-md-7 d-flex flex-wrap gap-2">
+              <button class="filter-pill active" data-cat="ALL" onclick="App.setCategoryFilter('ALL')">All Categories</button>
+              <button class="filter-pill" data-cat="Cooked Meals" onclick="App.setCategoryFilter('Cooked Meals')">Cooked Meals</button>
+              <button class="filter-pill" data-cat="Bakery" onclick="App.setCategoryFilter('Bakery')">Bakery</button>
+              <button class="filter-pill" data-cat="Fresh Produce" onclick="App.setCategoryFilter('Fresh Produce')">Produce</button>
+              <button class="filter-pill" data-cat="Packaged Goods" onclick="App.setCategoryFilter('Packaged Goods')">Packaged</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="ngo-available-listings-container" class="row g-3">
+          <!-- Filled dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Tab Content 2: My Claims -->
+      <div id="ngo-tab-content-claims" style="display: none;">
+        <div class="glass-panel p-4">
+          <h4 class="h5 mb-3">Your Claimed Donations & Logistics Tracking</h4>
+          <div id="ngo-claims-container">
+            <!-- Filled dynamically via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 4: VOLUNTEER PORTAL                  -->
+    <!-- ========================================== -->
+    <section id="view-volunteer" class="view-section" style="display: none;">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="h3 mb-1">Volunteer Courier Operations Hub</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Accept pickup tasks and deliver surplus meals to verified NGOs</p>
+        </div>
+      </div>
+
+      <!-- Volunteer Metrics -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="vol-stat-available" style="color: #38bdf8;">0</div>
+            <div class="metric-label">Available Pickup Tasks</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="vol-stat-assigned" style="color: #fbbf24;">0</div>
+            <div class="metric-label">In Progress</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="vol-stat-completed" style="color: #34d399;">0</div>
+            <div class="metric-label">Completed Deliveries</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="vol-stat-kg">0 kg</div>
+            <div class="metric-label">Weight Delivered</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Available Tasks Column -->
+        <div class="col-lg-6">
+          <div class="glass-panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="h5 mb-0">Unassigned Pickup Tasks (FR-6)</h4>
+              <button class="btn-secondary-custom" style="padding: 0.35rem 0.75rem; font-size: 0.78rem;" onclick="App.loadVolunteerTasks()">↻ Refresh</button>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              These donations were claimed by NGOs and require courier transit:
+            </p>
+            <div id="volunteer-available-tasks-container">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- My Active Deliveries Column -->
+        <div class="col-lg-6">
+          <div class="glass-panel p-4 h-100">
+            <h4 class="h5 mb-3">My Active Deliveries & Workflow Advancer</h4>
+            <div id="volunteer-my-deliveries-container">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 5: ADMIN CONSOLE (FR-9, FR-10)       -->
+    <!-- ========================================== -->
+    <section id="view-admin" class="view-section" style="display: none;">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="h3 mb-1">Platform Administrator Command Console</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Verified oversight, NGO approvals, account management, and real-data metrics</p>
+        </div>
+      </div>
+
+      <!-- Admin Platform Stats Bar -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="admin-stat-users">0</div>
+            <div class="metric-label">Total Users</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="admin-stat-pending-ngos" style="color: #c084fc;">0</div>
+            <div class="metric-label">Pending NGO Reviews</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="admin-stat-listings">0</div>
+            <div class="metric-label">Total Listings Created</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="metric-card">
+            <div class="metric-value" id="admin-stat-rescued-kg" style="color: #34d399;">0 kg</div>
+            <div class="metric-label">Total Food Rescued</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Tabs -->
+      <div class="d-flex gap-2 mb-4 border-bottom pb-2" style="border-color: var(--border-color) !important;">
+        <button class="filter-pill active" id="tab-admin-ngos" onclick="App.switchAdminTab('ngos')">NGO Verification (FR-2, FR-9)</button>
+        <button class="filter-pill" id="tab-admin-users" onclick="App.switchAdminTab('users')">User Management (FR-9)</button>
+        <button class="filter-pill" id="tab-admin-analytics" onclick="App.switchAdminTab('analytics')">Platform Analytics & Audit (FR-10)</button>
+      </div>
+
+      <!-- Tab: NGO Verification -->
+      <div id="admin-tab-content-ngos">
+        <div class="glass-panel p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="h5 mb-0">NGO Partner Verification Queue</h4>
+            <button class="btn-secondary-custom" style="padding: 0.35rem 0.75rem; font-size: 0.78rem;" onclick="App.loadAdminNgos()">↻ Refresh</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Organisation Name</th>
+                  <th>Reg Number</th>
+                  <th>Operating Address</th>
+                  <th>Contact Email</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-ngos-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: User Management -->
+      <div id="admin-tab-content-users" style="display: none;">
+        <div class="glass-panel p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="h5 mb-0">Platform User Directory</h4>
+            <button class="btn-secondary-custom" style="padding: 0.35rem 0.75rem; font-size: 0.78rem;" onclick="App.loadAdminUsers()">↻ Refresh</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Account Status</th>
+                  <th>Toggle Access</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Analytics & Audit -->
+      <div id="admin-tab-content-analytics" style="display: none;">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="glass-panel p-4 h-100">
+              <h5 class="mb-3">Donation Status Pipeline</h5>
+              <div id="admin-status-pipeline" class="d-flex flex-column gap-2">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="glass-panel p-4 h-100">
+              <h5 class="mb-3">Food Categories Rescued</h5>
+              <div id="admin-category-distribution" class="d-flex flex-column gap-2">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: AUTHENTICATION (Login / Register)   -->
+  <!-- ========================================== -->
+  <div class="modal" id="modal-auth" tabindex="-1" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 1200; overflow-y: auto;">
+    <div style="max-width: 500px; margin: 40px auto; padding: 15px;">
+      <div class="modal-content-custom p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="h5 mb-0 text-white" id="modal-auth-title">Account Access</h4>
+          <button type="button" onclick="App.closeAuthModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+
+        <!-- Auth Tabs -->
+        <div class="d-flex gap-2 mb-4">
+          <button class="filter-pill flex-fill text-center active" id="auth-tab-login" onclick="App.switchAuthTab('login')">Sign In</button>
+          <button class="filter-pill flex-fill text-center" id="auth-tab-register" onclick="App.switchAuthTab('register')">Register Publicly</button>
+        </div>
+
+        <!-- Form: Login -->
+        <form id="form-login" onsubmit="App.handleLogin(event)">
+          <div class="mb-3">
+            <label class="form-label-custom">Email Address</label>
+            <input type="email" id="login-email" class="form-control-custom" required placeholder="name@example.com">
+          </div>
+          <div class="mb-4">
+            <label class="form-label-custom">Password</label>
+            <input type="password" id="login-password" class="form-control-custom" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn-primary-custom w-100 justify-content-center py-2">
+            Sign In to Dashboard
+          </button>
+        </form>
+
+        <!-- Form: Register -->
+        <form id="form-register" onsubmit="App.handleRegister(event)" style="display: none;">
+          <div class="mb-3">
+            <label class="form-label-custom">Register As (Role)</label>
+            <select id="reg-role" class="form-select-custom" onchange="App.handleRoleChange(this.value)">
+              <option value="DONOR">DONOR — Food Business or Individual</option>
+              <option value="NGO">NGO — Non-Profit Food Distributor</option>
+              <option value="VOLUNTEER">VOLUNTEER — Courier Pickup & Delivery</option>
+            </select>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 4px;">
+              * Note: ADMIN role cannot be created publicly (security requirement).
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label-custom">Full Name / Contact Person</label>
+            <input type="text" id="reg-name" class="form-control-custom" required placeholder="e.g. Sarah Jenkins">
+          </div>
+          <div class="mb-3">
+            <label class="form-label-custom">Email Address</label>
+            <input type="email" id="reg-email" class="form-control-custom" required placeholder="name@example.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label-custom">Password (6+ characters)</label>
+            <input type="password" id="reg-password" class="form-control-custom" required minlength="6" placeholder="••••••••">
+          </div>
+
+          <!-- NGO Specific Fields -->
+          <div id="ngo-register-fields" style="display: none; padding: 1rem; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 1rem;">
+            <div class="mb-2">
+              <label class="form-label-custom">NGO Organisation Name *</label>
+              <input type="text" id="reg-ngo-name" class="form-control-custom" placeholder="e.g. City Bread Charity">
+            </div>
+            <div class="mb-2">
+              <label class="form-label-custom">Official Registration Number *</label>
+              <input type="text" id="reg-ngo-number" class="form-control-custom" placeholder="e.g. NGO-IND-8849">
+            </div>
+            <div>
+              <label class="form-label-custom">Distribution Center Address *</label>
+              <input type="text" id="reg-ngo-address" class="form-control-custom" placeholder="e.g. 14 Market St, District 3">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary-custom w-100 justify-content-center py-2">
+            Complete Registration
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: CREATE FOOD LISTING                -->
+  <!-- ========================================== -->
+  <div class="modal" id="modal-create-listing" tabindex="-1" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 1200; overflow-y: auto;">
+    <div style="max-width: 580px; margin: 40px auto; padding: 15px;">
+      <div class="modal-content-custom p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <span style="font-size: 1.3rem;">🍲</span>
+            <h4 class="h5 mb-0 text-white">Create Food Donation Listing</h4>
+          </div>
+          <button type="button" onclick="App.closeCreateListingModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+
+        <form id="form-create-listing" onsubmit="App.handleCreateListing(event)">
+          <div class="mb-3">
+            <label class="form-label-custom">Food Item Title / Description *</label>
+            <input type="text" id="listing-title" class="form-control-custom" required placeholder="e.g. 40 Fresh Gourmet Sandwich Platters">
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label-custom">Category *</label>
+              <select id="listing-category" class="form-select-custom" required>
+                <option value="Cooked Meals">Cooked Meals</option>
+                <option value="Bakery">Bakery & Bread</option>
+                <option value="Fresh Produce">Fresh Produce / Fruits</option>
+                <option value="Dairy">Dairy Products</option>
+                <option value="Packaged Goods">Packaged / Dry Goods</option>
+                <option value="Beverages">Beverages</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label-custom">Quantity *</label>
+              <input type="number" id="listing-quantity" class="form-control-custom" step="0.5" min="0.5" required placeholder="25">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label-custom">Unit *</label>
+              <select id="listing-unit" class="form-select-custom" required>
+                <option value="kg">kg</option>
+                <option value="portions">portions</option>
+                <option value="boxes">boxes</option>
+                <option value="litres">litres</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label-custom">Pickup Address *</label>
+            <input type="text" id="listing-address" class="form-control-custom" required placeholder="e.g. 102 Metro Boulevard, Central Plaza">
+          </div>
+
+          <div class="row g-2 mb-4">
+            <div class="col-md-6">
+              <label class="form-label-custom">Pickup Window *</label>
+              <input type="text" id="listing-window" class="form-control-custom" required placeholder="e.g. Today 16:00 - 18:30">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-custom">Expiry Date & Time *</label>
+              <input type="datetime-local" id="listing-expires" class="form-control-custom" required>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn-secondary-custom" onclick="App.closeCreateListingModal()">Cancel</button>
+            <button type="submit" class="btn-primary-custom">Publish Donation</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: EDIT FOOD LISTING (FR-3)           -->
+  <!-- ========================================== -->
+  <div class="modal" id="modal-edit-listing" tabindex="-1" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 1200; overflow-y: auto;">
+    <div style="max-width: 580px; margin: 40px auto; padding: 15px;">
+      <div class="modal-content-custom p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="h5 mb-0 text-white">Edit Surplus Listing</h4>
+          <button type="button" onclick="App.closeEditListingModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        <form id="form-edit-listing" onsubmit="App.handleEditListing(event)">
+          <input type="hidden" id="edit-listing-id">
+          <div class="mb-3">
+            <label class="form-label-custom">Title</label>
+            <input type="text" id="edit-listing-title" class="form-control-custom" required>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label-custom">Category</label>
+              <select id="edit-listing-category" class="form-select-custom" required>
+                <option value="Cooked Meals">Cooked Meals</option>
+                <option value="Bakery">Bakery & Bread</option>
+                <option value="Fresh Produce">Fresh Produce</option>
+                <option value="Dairy">Dairy</option>
+                <option value="Packaged Goods">Packaged Goods</option>
+                <option value="Beverages">Beverages</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label-custom">Quantity</label>
+              <input type="number" id="edit-listing-quantity" class="form-control-custom" step="0.5" min="0.5" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label-custom">Unit</label>
+              <select id="edit-listing-unit" class="form-select-custom" required>
+                <option value="kg">kg</option>
+                <option value="portions">portions</option>
+                <option value="boxes">boxes</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label-custom">Pickup Address</label>
+            <input type="text" id="edit-listing-address" class="form-control-custom" required>
+          </div>
+          <div class="row g-2 mb-4">
+            <div class="col-md-6">
+              <label class="form-label-custom">Pickup Window</label>
+              <input type="text" id="edit-listing-window" class="form-control-custom" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-custom">Expiry Date & Time</label>
+              <input type="datetime-local" id="edit-listing-expires" class="form-control-custom" required>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn-secondary-custom" onclick="App.closeEditListingModal()">Cancel</button>
+            <button type="submit" class="btn-primary-custom">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- FLOATING EVALUATOR QUICK ROLE SWITCHER BAR               -->
+  <!-- ======================================================== -->
+  <aside class="demo-switcher-bar">
+    <span class="demo-switcher-title">Demo Roles:</span>
+    <button class="demo-btn" onclick="App.quickLogin('admin@foodshare.org', 'AdminSecurePass123!')">👑 Admin</button>
+    <button class="demo-btn" onclick="App.quickLoginDonor()">🍲 Donor</button>
+    <button class="demo-btn" onclick="App.quickLoginNgoVerified()">🏢 Verified NGO</button>
+    <button class="demo-btn" onclick="App.quickLoginNgoPending()">⏳ Pending NGO</button>
+    <button class="demo-btn" onclick="App.quickLoginVolunteer()">🚴 Volunteer</button>
+  </aside>
+
+  <!-- Application Logic Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script src="/js/effects.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "foodshare-ai",
+  "version": "1.0.0",
+  "description": "FoodShare AI - Surplus Food Rescue Platform with Role-Based Access and AI Surplus Prediction",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node test/acceptance_tests.js"
+  },
+  "keywords": [
+    "food-rescue",
+    "surplus-food",
+    "foodshare-ai",
+    "express",
+    "sqlite3",
+    "bootstrap5"
+  ],
+  "author": "Rajesh",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "express-session": "^1.18.2",
+    "sqlite3": "^5.1.7",
+    "uuid": "^13.0.0"
+  }
+}
